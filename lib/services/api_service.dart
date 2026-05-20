@@ -225,4 +225,19 @@ class ApiService {
     }
     return response.data as Map<String, dynamic>;
   }
+
+  // AI Analyze
+  Future<String> aiAnalyze({String? query}) async {
+    final response = await _dio.post(
+      '/transactions/ai-analyze',
+      data: {
+        if (query != null) 'query': query,
+      },
+    );
+    final data = response.data;
+    if (data is Map<String, dynamic>) {
+      return data['analysis'] as String;
+    }
+    return data.toString();
+  }
 }

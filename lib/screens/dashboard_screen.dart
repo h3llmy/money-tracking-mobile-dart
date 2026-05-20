@@ -6,6 +6,7 @@ import '../widgets/transaction_list_item.dart';
 import '../services/notification_service.dart';
 import 'apps_selection_screen.dart';
 import 'settings_screen.dart';
+import 'ai_analyze_screen.dart';
 
 /// DashboardScreen as ConsumerStatefulWidget so every closure uses
 /// [this.context] (the State's stable BuildContext), avoiding the
@@ -40,6 +41,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       context,
       rootNavigator: true,
     ).push(MaterialPageRoute(builder: (_) => const SettingsScreen()));
+  }
+
+  void _openAiAnalyze() {
+    if (!mounted) return;
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(MaterialPageRoute(builder: (_) => const AiAnalyzeScreen()));
   }
 
   // ── build ─────────────────────────────────────────────────────────────
@@ -97,6 +106,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
               // ── Automation section ────────────────────────────────
               _buildAutomationSection(),
+
+              const SizedBox(height: 20),
+
+              // ── AI Insights card ───────────────────────────────────
+              _buildAiInsightsCard(),
 
               const SizedBox(height: 32),
 
@@ -249,6 +263,87 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildAiInsightsCard() {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: _openAiAnalyze,
+        borderRadius: BorderRadius.circular(24),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                const Color(0xFF6366F1).withValues(alpha: 0.15),
+                const Color(0xFF8B5CF6).withValues(alpha: 0.08),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Icon(
+                  Icons.auto_awesome,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'AI Insights',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Analyze your spending with AI',
+                      style: TextStyle(
+                        color: Color(0xFF94A3B8),
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Color(0xFF818CF8),
+                  size: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
