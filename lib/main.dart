@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_notification_listener/flutter_notification_listener.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'theme/app_theme.dart';
 import 'screens/main_navigation_screen.dart';
 import 'screens/login_screen.dart';
@@ -10,7 +11,8 @@ import 'providers/data_providers.dart';
 import 'providers/auth_provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   // Load saved API base URL before building the widget tree
   final savedBaseUrl = await ApiService.getSavedBaseUrl();
@@ -27,6 +29,9 @@ void main() async {
 
   // Initialize the notification listener after UI is stable
   _initServices();
+
+  // Remove splash screen once everything is ready
+  FlutterNativeSplash.remove();
 }
 
 Future<void> _initServices() async {
@@ -70,9 +75,7 @@ class MyApp extends ConsumerWidget {
       homeScreen = const Scaffold(
         backgroundColor: Color(0xFF0B0F19),
         body: Center(
-          child: CircularProgressIndicator(
-            color: Color(0xFF6366F1),
-          ),
+          child: CircularProgressIndicator(color: Color(0xFF6366F1)),
         ),
       );
     } else if (authState.isAuthenticated) {
